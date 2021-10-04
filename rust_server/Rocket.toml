@@ -1,0 +1,9 @@
+[default.mongo]
+user = "nano"
+pass = "ilovekittens"
+host = "localhost"
+port = 27017
+
+[default.tls]
+certs = "../tls/ca_cert.pem"
+key = "../tls/ca_key.pem"

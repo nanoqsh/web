@@ -1,0 +1,6 @@
+[addr]
+host = "localhost"
+port = 8000
+
+[tls]
+certs = "../tls/ca_cert.pem"
