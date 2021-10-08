@@ -48,6 +48,7 @@ impl ConnectMongo for rocket::Rocket<rocket::Build> {
                 Actual::Signed(i) => Some(i as u32),
                 _ => None,
             }
+            .map(|n| n * 3)
         };
 
         let config: crate::config::Config =
