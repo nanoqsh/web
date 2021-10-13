@@ -39,18 +39,6 @@ impl ConnectMongo for rocket::Rocket<rocket::Build> {
         F: FnOnce(Client) -> S + Send,
         S: Send + Sync + 'static,
     {
-        let get_workers = || {
-            use rocket::figment::error::Actual;
-
-            let value = self.figment().find_value("workers").ok()?;
-            match value.to_num()?.to_actual() {
-                Actual::Unsigned(u) => Some(u as u32),
-                Actual::Signed(i) => Some(i as u32),
-                _ => None,
-            }
-            .map(|n| n * 3)
-        };
-
         let config: crate::config::Config =
             self.figment().extract().expect("Config reading failed");
 
@@ -61,7 +49,7 @@ impl ConnectMongo for rocket::Rocket<rocket::Build> {
             .expect("Options parsing failed");
 
         options.retry_writes = Some(false);
-        options.max_pool_size = mongo.workers().or_else(get_workers);
+        options.max_pool_size = mongo.workers();
 
         let client = Client::with_options(options).expect("Client creation failed");
         self.manage(f(client))
